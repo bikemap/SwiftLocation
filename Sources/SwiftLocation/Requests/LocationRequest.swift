@@ -187,7 +187,7 @@ public class LocationRequest: ServiceRequest, Hashable {
             return customValidationRule(location,location.timestamp.timeIntervalSinceNow)
         }
         
-        guard location.horizontalAccuracy < accuracy.value else {
+        guard location.horizontalAccuracy < accuracy.value, location.horizontalAccuracy >= 0 else {
             return false // accuracy is not enough
         }
         
