@@ -186,7 +186,10 @@ public class LocationRequest: ServiceRequest, Hashable {
             // overridden by custom validator rule
             return customValidationRule(location,location.timestamp.timeIntervalSinceNow)
         }
-        
+
+        guard location.coordinate.latitude.inRange(-180, 180) else { return false }
+        guard location.coordinate.longitude.inRange(-180, 180) else { return false }
+
         guard location.horizontalAccuracy < accuracy.value, location.horizontalAccuracy >= 0 else {
             return false // accuracy is not enough
         }
@@ -277,4 +280,13 @@ public extension LocationRequest {
         case fixed(minInterval: TimeInterval?, minDistance: CLLocationDistance?)
     }
     
+}
+
+// MARK: - Private
+
+private extension Double {
+
+    func inRange(_ lower: Double, _ upper: Double) -> Bool {
+        return (self > lower && self < upper)
+    }
 }
