@@ -828,10 +828,12 @@ extension LocationManager: CLLocationManagerDelegate {
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let mostRecentLocation = locations.last else {
-            return
-        }
+        guard let mostRecentLocation = locations.last else { return }
+        guard mostRecentLocation.coordinate.latitude.inRange(-180, 180) else { return }
+        guard mostRecentLocation.coordinate.longitude.inRange(-180, 180) else { return }
+
         lastLocation = mostRecentLocation
+
         for request in queueLocationRequests { // dispatch location to any request
             request.complete(location: mostRecentLocation)
         }
@@ -888,4 +890,13 @@ extension LocationManager: CLLocationManagerDelegate {
         }
     }
     
+}
+
+// MARK: - Private
+
+private extension Double {
+
+    func inRange(_ lower: Double, _ upper: Double) -> Bool {
+        return (self > lower && self < upper)
+    }
 }
