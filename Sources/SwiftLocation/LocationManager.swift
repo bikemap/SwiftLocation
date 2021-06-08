@@ -829,7 +829,7 @@ extension LocationManager: CLLocationManagerDelegate {
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let mostRecentLocation = locations.last else { return }
-        guard mostRecentLocation.coordinate.latitude.inRange(-180, 180) else { return }
+        guard mostRecentLocation.coordinate.latitude.inRange(-90, 90) else { return }
         guard mostRecentLocation.coordinate.longitude.inRange(-180, 180) else { return }
 
         lastLocation = mostRecentLocation
